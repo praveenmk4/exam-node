@@ -30,4 +30,14 @@ module.exports.addFaculty = (req, res) => {
         }
     });
 };
-
+module.exports.getAllFacuties = (req,res) => {
+    Faculty.find({},(err,Data)=>{
+        if(err){
+            res.send(err);
+        }else if(Data == null){
+            res.send(`No faculty members are available`);
+        }else{
+            res.send(Data);
+        }
+    });
+};
