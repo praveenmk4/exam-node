@@ -32,3 +32,14 @@ module.exports.addStudent = (req, res) => {
         }
     });
 };
+module.exports.getAllStudents = (req,res) =>{
+    Student.find({},(err,Data)=>{
+        if(err){
+            res.send(err);
+        }else if(Data == null){
+            res.send(`No users added.Please add some users`);
+        }else{
+            res.send(Data);
+        }
+    });
+};
