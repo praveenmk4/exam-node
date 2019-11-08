@@ -10,7 +10,7 @@
 	MongoDb community edition
 # Installing
 	After cloning or downloading the project.
-# npm install
+	# npm install
 	will set up all the dependencies to your local machine
 
 # Running the tests
