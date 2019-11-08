@@ -21,18 +21,19 @@ module.exports = {
     getByUserName :getByUserName
 }; */
 
-const mongoose = require ('mongoose');
-const Schema =  mongoose.Schema,
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;
 const FacultySchema = new mongoose.Schema({
-    username:{type:String,required:true},
-    userId:{type:ObjectId},
-    personelDetails :{
-        name :{type:String,required:false},
-        email:{type:String,require:false}
+    username: { type: String, required: true },
+    /* password:{type:String,required:true}, */
+    userId: { type: ObjectId },
+    personelDetails: {
+        name: { type: String, required: false },
+        email: { type: String, require: false }
     },
-    professionalDeatails :{},
-    students :[{}]
-});    
-const FacultyModel = mongoose.model('Faculty',FacultySchema);
-module.exports = {Faculty : FacultyModel};
+    professionalDeatails: {},
+    students: [{}]
+});
+const FacultyModel = mongoose.model('Faculty', FacultySchema);
+module.exports = { Faculty: FacultyModel };

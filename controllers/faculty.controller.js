@@ -1,37 +1,29 @@
 const Faculty = require('../models/faculty.model').Faculty;
 const async = require("async");
-module.exports.addFaculty = (req,res) =>{
- /*    wrap(addNewFaculty(req)) */
- const facultyMember =  {
-    username : req.body.username,
-    password : req.body.password,
-    name:req.body.name,
-    email:req.body.email
-};
-    console.log('Im in the add faculty service');
-    Faculty.findOne({username:facultyMember.username}).exec((err,Data)=>{
+module.exports.addFaculty = (req, res) => {
 
-        if(err){
+    const facultyMember = { username: req.body.username, password: req.body.password, name: req.body.name, email: req.body.email };
+
+    Faculty.findOne({ username: facultyMember.username }).exec((err, Data) => {
+        if (err) {
             res.send(err);
-        }else if(Data !== null){
+        } else if (Data !== null) {
             res.send(`User aleready exists with username ${facultyMember.username}`);
-        }else{
+        } else {
             let member = {
-                username :facultyMember.username,
-                personelDetails :{
+                username: facultyMember.username,
+                personelDetails: {
                     name: facultyMember.name,
-                    email:facultyMember.email
+                    email: facultyMember.email
                 },
-                professionalDeatails:{},
-                students:[]
+                professionalDeatails: {},
+                students: []
             }
-            let newFacultyMember =  new Faculty(member);
-            newFacultyMember.save((error,result)=>{
-                if(error){
-                    console.log('cominginside the save');
-                    res.send (error);
-                }else{
-                    console.log('cominginside the save');
+            let newFacultyMember = new Faculty(member);
+            newFacultyMember.save((error, result) => {
+                if (error) {
+                    res.send(error);
+                } else {
                     res.send(result);
                 }
             });
