@@ -10,7 +10,7 @@ module.exports.addFaculty = (req, res) => {
         } else if (Data !== null) {
             res.send(`User aleready exists with username ${facultyMember.username}`);
         } else {
-            let member = {
+            let member = new Faculty({
                 username: facultyMember.username,
                 personelDetails: {
                     name: facultyMember.name,
@@ -18,9 +18,10 @@ module.exports.addFaculty = (req, res) => {
                 },
                 professionalDeatails: {},
                 students: []
-            }
-            let newFacultyMember = new Faculty(member);
-            newFacultyMember.save((error, result) => {
+            });
+            member.password =  member.generateHash(req.body.password);
+          //  let newFacultyMember = new Faculty(member);
+          member.save((error, result) => {
                 if (error) {
                     res.send(error);
                 } else {
