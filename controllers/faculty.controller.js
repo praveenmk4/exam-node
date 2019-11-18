@@ -1,10 +1,11 @@
 const Faculty = require('../models/faculty.model').Faculty;
 const async = require("async");
+const email = require("../utilities/email");
 module.exports.addFaculty = (req, res) => {
 
     const facultyMember = { username: req.body.username, password: req.body.password, name: req.body.name, email: req.body.email };
 
-    Faculty.findOne({ username: facultyMember.username }).exec((err, Data) => {
+    Faculty.findOne({ username: facultyMember.email }).exec((err, Data) => {
         if (err) {
             res.send(err);
         } else if (Data !== null) {
@@ -26,6 +27,7 @@ module.exports.addFaculty = (req, res) => {
                     res.send(error);
                 } else {
                     res.send(result);
+                    email.sendMail("Thanks for registering..!!!","Please reset your password here http://localhost:4201/passwordreset","","",facultyMember.email);
                 }
             });
         }
