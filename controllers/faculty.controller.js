@@ -27,7 +27,8 @@ module.exports.addFaculty = (req, res) => {
                     res.send(error);
                 } else {
                     res.send(result);
-                    email.sendMail("Thanks for registering..!!!","Please reset your password here http://localhost:4201/passwordreset","","",facultyMember.email);
+                    let url = "http://localhost:4201/passwordreset";
+                    email.sendMail(`Thanks for registering..!!!","Please Login to the web site by clicking on the  following URL ${url} `,"","",facultyMember.email,"Confirmation Mail");
                 }
             });
         }
