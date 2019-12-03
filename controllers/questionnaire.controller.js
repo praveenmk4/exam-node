@@ -1,4 +1,5 @@
 const Questionnaire = require('../models/questionnaire.model').Questionnaire;
+const Faculty = require('../models/faculty.model').Faculty;
 const mongoose = require('mongoose');
 module.exports.addQuestions = (req, res) => {
     console.log('in creaedasfadsfasdfasdfasdfasddf');
@@ -41,10 +42,22 @@ module.exports.addQuestions = (req, res) => {
     });
 };
 module.exports.getRandomQuestion = (req, res) => {
-      console.log(req.params);
-      const number = Number(req.params.number);
+    const number = Number(req.params.number);
     Questionnaire.aggregate([{$match: { technology: req.params.technology}} ,{ "$unwind": "$questions" }  , { "$sample": { "size":number}}  ]).exec((err, Data) => {
         if (err) { res.send(err) } else {
+            res.send(Data);
+        }
+    });
+};
+module.exports.saveTest = (req,res) =>{
+    const test = {
+        userId :req.body.email,
+        questions:req.body.question
+    };
+ Faculty.findOneAndUpdate({email:req.body.email},{ $set: { tests: test }},{new: true, upsert: true} ).exec((err,Data) =>{
+        if(err){
+            res.send(err);
+        }else{
             res.send(Data);
         }
     });

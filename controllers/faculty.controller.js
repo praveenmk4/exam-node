@@ -3,7 +3,7 @@ const async = require("async");
 const email = require("../utilities/email");
 module.exports.addFaculty = (req, res) => {
 
-    const facultyMember = { username: req.body.username, password: req.body.password, name: req.body.name, email: req.body.email };
+    const facultyMember = { username: req.body.username, password: req.body.password, name: req.body.name, email: req.body.email ,mobile:req.body.mobile};
 
     Faculty.findOne({ username: facultyMember.email }).exec((err, Data) => {
         if (err) {
@@ -13,9 +13,10 @@ module.exports.addFaculty = (req, res) => {
         } else {
             let member = new Faculty({
                 username: facultyMember.username,
+                email: facultyMember.email,
                 personelDetails: {
                     name: facultyMember.name,
-                    email: facultyMember.email
+                    mobile:facultyMember.mobile 
                 },
                 professionalDeatails: {},
                 students: []
@@ -27,7 +28,7 @@ module.exports.addFaculty = (req, res) => {
                     res.send(error);
                 } else {
                     res.send(result);
-                    let url = "http://localhost:4201/passwordreset";
+                    let url = "http://localhost:4201/passwordreset";//change the ip address
                     email.sendMail(`Thanks for registering..!!!","Please Login to the web site by clicking on the  following URL ${url} `,"","",facultyMember.email,"Confirmation Mail");
                 }
             });
@@ -40,6 +41,16 @@ module.exports.getAllFacuties = (req,res) => {
             res.send(err);
         }else if(Data == null){
             res.send(`No faculty members are available`);
+        }else{
+            res.send(Data);
+        }
+    });
+};
+module.exports.getFacultyByEmail = (req,res)=>{
+    const User = req.params.email;
+    Faculty.findOne({email:User},(err,Data)=>{
+        if(err){
+            res.send(err);
         }else{
             res.send(Data);
         }
