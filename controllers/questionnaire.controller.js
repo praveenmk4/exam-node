@@ -62,3 +62,12 @@ module.exports.saveTest = (req,res) =>{
         }
     });
 };
+module.exports.getAllTests = (req,res) =>{
+    Faculty.findOne({email:req.params.email}).exec((err,Data) =>{
+        if(err){
+            res.send(err);
+        }else{
+            res.send(Data.tests);
+        }
+    })
+}
