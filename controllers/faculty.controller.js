@@ -1,5 +1,6 @@
 const Faculty = require('../models/faculty.model').Faculty;
 const async = require("async");
+const bcrypt =  require('bcrypt')    ;
 const email = require("../utilities/email");
 module.exports.addFaculty = (req, res) => {
 
@@ -53,6 +54,26 @@ module.exports.getFacultyByEmail = (req,res)=>{
             res.send(err);
         }else{
             res.send(Data);
+        }
+    });
+};
+module.exports.loginFacutly = (req,res) =>{
+    const User = req.body.email;
+    Faculty.findOne({email:User},(err,Data)=>{
+        if(err){
+            res.send(err);
+        }else{
+          bcrypt.compare(req.body.password,Data.password,(error,result) =>{
+              if(err){
+                  res.send(error);
+              }else{
+                  if(result){
+                      res.send('Valid')
+                  }else{
+                      res.send('Invalid');
+                  }
+              }
+          })
         }
     });
 };

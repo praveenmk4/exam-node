@@ -1,10 +1,10 @@
 const Student = require('../models/student.model').Student;
-
+const bcrypt = require('bcrypt');
 module.exports.addStudent = (req, res) => {
 
     const student = { username: req.body.username, password: req.body.password, name: req.body.name, email: req.body.email };
   
-    Student.findOne({ username: student.username }).exec((err, Data) => {
+    Student.findOne({ username: student.email }).exec((err, Data) => {
         if (err) {
             res.send(err);
         } else if (Data !== null) {
@@ -12,9 +12,10 @@ module.exports.addStudent = (req, res) => {
         } else {
             let member = {
                 username: student.username,
+                email: student.email,
                 personelDetails: {
-                    name: student.name,
-                    email: student.email
+                    name: student.name
+                    
                 },
                 professionalDeatails: {},
                 students: []
@@ -43,3 +44,40 @@ module.exports.getAllStudents = (req,res) =>{
         }
     });
 };
+module.exports.createPassword = (req,res) =>{
+    const user =  req.body.email;
+    const update = req.body.password;
+    const member = new Student();
+    Student.findOneAndUpdate({email:user},{ $set: { password: member.generateHash(update) } }, { new: true }).exec((err,Data)=>{
+        if(err){
+            res.send(err);
+        }else{
+           res.send(Data);
+        }});
+   /*      let doc =  await Student.findOne({email:user});
+        await Student.updateOne(update,{email:user});
+        await doc.save();
+        res.send(doc); */
+
+     
+}
+module.exports.loginStudent = (req,res) =>{
+    const user =  req.body.email;
+    Student.findOne({email:user}).exec((err,Data)=>{
+        if(err){
+            res.send(err);
+        }else{
+            bcrypt.compare(req.body.password,Data.password,(error,result)=>{
+                if(error){
+                    res.send(error);
+                }else{
+                    if(result){
+                        res.send('valid');
+                    }else{
+                        res.send('Invalid');
+                    }
+                }
+            });
+        }
+    });
+}
